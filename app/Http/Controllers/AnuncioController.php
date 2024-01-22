@@ -59,7 +59,12 @@ class AnuncioController extends Controller
      */
     public function update(Request $request, Anuncio $anuncio)
     {
-        //
+        $anuncio->update([
+            'nome' => $request->nome,
+            'link' => $request->link ?? $anuncio->link,
+        ]);
+
+        return response()->json($anuncio, 200);
     }
 
     /**
