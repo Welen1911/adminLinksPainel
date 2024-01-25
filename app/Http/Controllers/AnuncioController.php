@@ -10,9 +10,9 @@ class AnuncioController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $anuncios = Anuncio::all();
+        $anuncios = $request->user()->anuncios;
 
         return response()->json($anuncios, 200);
     }
@@ -30,7 +30,7 @@ class AnuncioController extends Controller
      */
     public function store(Request $request)
     {
-        $anuncio = Anuncio::create([
+        $anuncio = $request->user()->anuncios()->create([
             'nome' => $request->nome,
             'link' => $request->link,
         ]);
