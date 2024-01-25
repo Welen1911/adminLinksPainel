@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AnuncioController;
+use App\Http\Controllers\AuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,4 +20,10 @@ Route::middleware(['auth:sanctum'])->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/anuncios', AnuncioController::class);
+Route::post('/register', [AuthController::class, 'store']);
+
+Route::post('/login', [AuthController::class, 'login']);
+
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+Route::resource('/anuncios', AnuncioController::class)->middleware('auth:sanctum');
