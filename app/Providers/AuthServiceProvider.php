@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Anuncio;
+use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Gate;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -25,6 +28,10 @@ class AuthServiceProvider extends ServiceProvider
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
             return config('app.frontend_url')."/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
+        });
+
+        Gate::define('update-anuncio', function (User $user, Anuncio $anuncio) {
+            return $user->id === $anuncio->user_id;
         });
 
         //

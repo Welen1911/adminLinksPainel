@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Anuncio;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AnuncioController extends Controller
 {
@@ -59,6 +60,9 @@ class AnuncioController extends Controller
      */
     public function update(Request $request, Anuncio $anuncio)
     {
+        if (!Gate::allows('update-anuncio', $anuncio)) {
+            return response()->json(['message' => 'Esse anúncio é de outro usuário!'], 404);
+        }
         $anuncio->update([
             'nome' => $request->nome,
             'link' => $request->link ?? $anuncio->link,
@@ -72,6 +76,10 @@ class AnuncioController extends Controller
      */
     public function destroy(Anuncio $anuncio)
     {
+        if (!Gate::allows('update-anuncio', $anuncio)) {
+            return response()->json(['message' => 'Esse anúncio é de outro usuário!'], 404);
+        }
+
         $anuncio->delete();
 
         return response()->json($anuncio, 200);
